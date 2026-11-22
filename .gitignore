@@ -19,6 +19,9 @@ native/dist/
 # тесты
 test/node_modules/
 
+# локальный токен для deploy.ps1
+.ghtoken
+
 # служебные файлы, которые cap sync копирует из web/
 native/ios/App/App/public/_*
 native/ios/App/App/public/tools/
