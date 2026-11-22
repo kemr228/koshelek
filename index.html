@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Кошелёк</title>
+<meta name="description" content="Простой учёт расходов и доходов" />
+
+<meta name="theme-color" content="#f2f2f7" media="(prefers-color-scheme: light)" />
+<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)" />
+
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+<meta name="apple-mobile-web-app-title" content="Кошелёк" />
+
+<link rel="manifest" href="manifest.webmanifest" />
+<link rel="apple-touch-icon" href="icons/icon-180.png" />
+<link rel="icon" href="icons/icon-192.png" />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<div class="app">
+  <div class="views">
+
+    <!-- ЭКРАН 1: записи -->
+    <section class="view active" id="view-list">
+      <header class="hdr">
+        <button class="chev" data-m="-1" aria-label="Предыдущий месяц">
+          <svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg>
+        </button>
+        <h1 class="mlabel" data-today="1">—</h1>
+        <button class="chev" data-m="1" aria-label="Следующий месяц">
+          <svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>
+        </button>
+      </header>
+
+      <div class="card summary">
+        <div class="sum-cap">Остаток за месяц</div>
+        <div class="sum-val" id="sum-balance">0 ₽</div>
+        <div class="sum-row">
+          <div class="sum-cell">
+            <span class="sum-cap"><span class="dot g"></span>Доходы</span>
+            <b id="sum-income">0 ₽</b>
+          </div>
+          <div class="sum-cell">
+            <span class="sum-cap"><span class="dot r"></span>Расходы</span>
+            <b id="sum-expense">0 ₽</b>
+          </div>
+        </div>
+      </div>
+
+      <div id="tx-list"></div>
+    </section>
+
+    <!-- ЭКРАН 2: статистика -->
+    <section class="view" id="view-stats">
+      <header class="hdr">
+        <button class="chev" data-m="-1" aria-label="Предыдущий месяц">
+          <svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg>
+        </button>
+        <h1 class="mlabel" data-today="1">—</h1>
+        <button class="chev" data-m="1" aria-label="Следующий месяц">
+          <svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>
+        </button>
+      </header>
+
+      <div class="seg wide" id="stats-seg">
+        <button data-t="expense" class="on">Расходы</button>
+        <button data-t="income">Доходы</button>
+      </div>
+
+      <div class="card total-card">
+        <div class="sum-cap" id="stats-cap">Всего расходов</div>
+        <div class="sum-val" id="stats-total">0 ₽</div>
+      </div>
+
+      <div id="stats-list"></div>
+    </section>
+
+    <!-- ЭКРАН 3: настройки -->
+    <section class="view" id="view-settings">
+      <header class="hdr"><h1 class="title">Ещё</h1></header>
+
+      <div class="sec-title">Валюта</div>
+      <div class="card tight">
+        <label class="row">
+          <span>Символ валюты</span>
+          <select id="currency"></select>
+        </label>
+      </div>
+
+      <div class="sec-title">Данные</div>
+      <div class="card tight">
+        <button class="row btn-row" id="export">
+          <span>Сохранить копию</span><span class="muted">JSON</span>
+        </button>
+        <button class="row btn-row" id="import">
+          <span>Загрузить из файла</span><span class="muted">JSON</span>
+        </button>
+        <button class="row btn-row danger" id="clear">
+          <span>Удалить все записи</span>
+        </button>
+      </div>
+
+      <div class="card about">
+        <div class="about-name">Кошелёк <span id="about-ver">v1.0.0</span></div>
+        <p class="muted">
+          Все записи хранятся только на этом телефоне. Никуда не отправляются,
+          аккаунт не нужен. Чтобы не потерять данные — делай копию раз в месяц.
+        </p>
+        <p class="muted" id="about-count">Записей: 0</p>
+      </div>
+
+      <p class="foot">Сделано вручную, без рекламы и подписок</p>
+    </section>
+
+  </div>
+
+  <button class="fab" id="fab" aria-label="Добавить запись">
+    <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+  </button>
+
+  <nav class="tabbar" id="tabbar">
+    <button data-view="list" class="on">
+      <svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h10"/></svg>
+      <span>Записи</span>
+    </button>
+    <button data-view="stats">
+      <svg viewBox="0 0 24 24"><path d="M5 19v-7M12 19V5M19 19v-4"/></svg>
+      <span>Статистика</span>
+    </button>
+    <button data-view="settings">
+      <svg viewBox="0 0 24 24"><path d="M4 8h8M18 8h2M4 16h4M12 16h8"/><circle cx="15" cy="8" r="2.4"/><circle cx="9" cy="16" r="2.4"/></svg>
+      <span>Ещё</span>
+    </button>
+  </nav>
+</div>
+
+<!-- нижняя шторка добавления/редактирования -->
+<div class="sheet-wrap" id="sheet" hidden>
+  <div class="sheet-bg" data-close="1"></div>
+  <div class="sheet" role="dialog" aria-modal="true" aria-label="Новая запись">
+    <div class="grabber"></div>
+
+    <div class="seg" id="type-seg">
+      <button data-type="expense" class="on">Расход</button>
+      <button data-type="income">Доход</button>
+    </div>
+
+    <div class="amount-row">
+      <input id="f-amount" type="text" inputmode="decimal" placeholder="0" autocomplete="off" />
+      <span class="cur" id="f-cur">₽</span>
+    </div>
+
+    <div class="cats" id="f-cats"></div>
+
+    <label class="field">
+      <input id="f-note" type="text" placeholder="Комментарий (необязательно)" maxlength="60" autocomplete="off" />
+    </label>
+
+    <label class="field date-field">
+      <span>Дата</span>
+      <input id="f-date" type="date" />
+    </label>
+
+    <button id="f-save" class="btn primary">Сохранить</button>
+    <button id="f-del" class="btn ghost danger" hidden>Удалить запись</button>
+  </div>
+</div>
+
+<!-- модалка с текстом резервной копии -->
+<div class="modal-wrap" id="modal" hidden>
+  <div class="sheet-bg" data-close-modal="1"></div>
+  <div class="modal">
+    <h2>Резервная копия</h2>
+    <p class="muted">Скопируй текст и сохрани в заметки или отправь себе.</p>
+    <textarea id="m-text" readonly></textarea>
+    <button class="btn primary" id="m-copy">Скопировать</button>
+    <button class="btn ghost" data-close-modal="1">Закрыть</button>
+  </div>
+</div>
+
+<input type="file" id="import-file" accept=".json,application/json" hidden />
+
+<div class="toast" id="toast" hidden></div>
+
+<script src="app.js"></script>
+</body>
+</html>
