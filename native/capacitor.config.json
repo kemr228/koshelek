@@ -1,0 +1,6 @@
+{
+  "appId": "com.koshelek.wallet",
+  "appName": "Кошелёк",
+  "webDir": "../web",
+  "backgroundColor": "#f2f2f7"
+}

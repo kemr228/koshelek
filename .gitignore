@@ -16,6 +16,13 @@ native/dist/
 *.ipa
 *.xcarchive
 
+# тесты
+test/node_modules/
+
+# служебные файлы, которые cap sync копирует из web/
+native/ios/App/App/public/_*
+native/ios/App/App/public/tools/
+
 # система
 .DS_Store
 Thumbs.db

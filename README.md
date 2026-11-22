@@ -12,6 +12,8 @@
 
 ## Установка на iPhone
 
+Подробная пошаговая инструкция — в [docs/ustanovka-iphone.md](docs/ustanovka-iphone.md). Коротко:
+
 ### Вариант 1: PWA — быстро и бесплатно
 
 1. Открой адрес приложения (например `https://<user>.github.io/koshelek/`) в **Safari**.
