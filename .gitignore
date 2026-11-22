@@ -1,0 +1,21 @@
+# временные файлы разработки
+web/_shots/
+web/_seed.html
+web/_preview.html
+web/_debug.html
+web/_frame.html
+
+# бинарники инструментов
+web/tools/bin/
+
+# node / capacitor
+native/node_modules/
+native/ios/App/build/
+native/ios/App/DerivedData/
+native/dist/
+*.ipa
+*.xcarchive
+
+# система
+.DS_Store
+Thumbs.db
