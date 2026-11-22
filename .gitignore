@@ -22,6 +22,9 @@ test/node_modules/
 # локальный токен для deploy.ps1
 .ghtoken
 
+# временные QR-коды
+qr*.png
+
 # служебные файлы, которые cap sync копирует из web/
 native/ios/App/App/public/_*
 native/ios/App/App/public/tools/
