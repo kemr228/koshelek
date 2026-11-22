@@ -1,0 +1,65 @@
+name: Собрать unsigned IPA
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'web/**'
+      - 'native/**'
+      - '.github/workflows/build-ipa.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+          cache-dependency-path: native/pnpm-lock.yaml
+
+      - name: Установить зависимости
+        working-directory: native
+        run: pnpm install --frozen-lockfile
+
+      - name: Синхронизировать web в iOS-проект
+        working-directory: native
+        run: pnpm exec cap sync ios
+
+      - name: Убрать служебные файлы разработки
+        working-directory: native/ios/App/App/public
+        run: |
+          rm -rf _shots tools _debug.html _frame.html _preview.html _seed.html README.md
+
+      - name: Собрать архив без подписи
+        working-directory: native/ios/App
+        run: |
+          xcodebuild -project App.xcodeproj -scheme App -configuration Release \
+            -sdk iphoneos -destination 'generic/platform=iOS' \
+            -archivePath "$RUNNER_TEMP/App.xcarchive" \
+            CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY="" archive
+
+      - name: Упаковать в IPA
+        run: |
+          mkdir -p "$RUNNER_TEMP/dist/Payload"
+          cp -R "$RUNNER_TEMP/App.xcarchive/Products/Applications/App.app" "$RUNNER_TEMP/dist/Payload/"
+          cd "$RUNNER_TEMP/dist"
+          zip -qry koshelek-unsigned.ipa Payload
+          ls -la koshelek-unsigned.ipa
+
+      - name: Артефакт
+        uses: actions/upload-artifact@v4
+        with:
+          name: koshelek-unsigned-ipa
+          path: ${{ runner.temp }}/dist/koshelek-unsigned.ipa
+          retention-days: 30
